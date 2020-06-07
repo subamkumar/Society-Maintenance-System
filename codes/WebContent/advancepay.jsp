@@ -1,0 +1,512 @@
+<%@ page import="society.*,java.util.*" %>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="css/side-nav.css"/>
+</head>
+<script>
+function Payfunc()
+{
+	var val = document.getElementById("payopt").value;
+	console.log("hello "+val);
+	
+	if(val == 1)
+	{
+		console.log(val)
+		document.getElementById("container1").style.display="block";
+		document.getElementById("container2").style.display="none";
+		document.getElementById("container3").style.display="none";
+		document.getElementById("container4").style.display="none";
+	}
+	else if(val == 2)
+	{
+		console.log(val)
+		document.getElementById("container1").style.display="none";
+		document.getElementById("container2").style.display="block";
+		document.getElementById("container3").style.display="none";
+		document.getElementById("container4").style.display="none";
+	}
+	else if(val == 3)
+	{
+		console.log(val)
+		document.getElementById("container1").style.display="none";
+		document.getElementById("container2").style.display="none";
+		document.getElementById("container3").style.display="block";
+		document.getElementById("container4").style.display="none";
+	}
+	else if(val == 4)
+	{
+		console.log(val)
+		document.getElementById("container1").style.display="none";
+		document.getElementById("container2").style.display="none";
+		document.getElementById("container3").style.display="none";
+		document.getElementById("container4").style.display="block";
+	}
+}
+</script>
+<body>
+
+<%
+	if(request.getSession().getAttribute("userID") == null)
+	{
+		response.sendRedirect("http://localhost:8182/society_latierra/");
+	}
+%>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a href="#">
+          <span onclick="openNav()" style="color:white;font-size:30px;margin-top:10px;margin-right:30px;" class="glyphicon glyphicon-menu-hamburger"></span>
+      </a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li><a href="http://localhost:8182/society_latierra/maintenance.jsp">Create Maintenance</a></li>
+      <li><a href="http://localhost:8182/society_latierra/showmaint.jsp">Show Maintenance</a></li>
+      <li><a href="http://localhost:8182/society_latierra/balancepay.jsp">Balance</a></li>
+      <li><a href="http://localhost:8182/society_latierra/advancepay.jsp">Advance</a></li>
+      <li><a href="http://localhost:8182/society_latierra/finalmaint.jsp">Finalize</a></li>
+      <li><a href="http://localhost:8182/society_latierra/paymentinfo.jsp">Payment</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="http://localhost:8182/society_latierra/signout.jsp"><span class="glyphicon glyphicon-user"></span> Sign Out</a></li>
+    </ul>
+  </div>
+</nav>
+<jsp:include page="side-nav.jsp"/>
+<p style="margin-top:60px;"></p>
+
+<form action="http://localhost:8182/society_latierra/advancepay.jsp" method="post">
+	<div class="container" style="margin-top:60px;"> 
+		<div class="input-group">
+			<input type="text" class="form-control" style="height:40px;" placeholder="Enter the flat No for Advance Payment" name="flatno">
+			<div class="input-group-btn">
+		   		<button class="btn btn-default btn-lg" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+			</div>
+		</div>
+	</div> 
+</form>
+<br>
+	<%
+	String flatno = request.getParameter("flatno");
+	if(flatno!=null)
+	{
+		dataManager d = new dataManager();
+		specificflat sf =  d.getSpecificFlatDetails(flatno);
+		FlatModel f = sf.getFlatInfo();
+		advance_UI_Info aui = null;
+		if(f!=null)
+			 aui = d.getAdvanceInfo(f);
+		
+		if(f!=null && aui!=null)
+		{
+			
+			String payOption = request.getParameter("payopt");
+			
+			if(payOption!=null)
+			{
+				if(payOption.equals("1"))
+				{
+					//cheque
+					String chequeNo = request.getParameter("chqno");
+					String chequedate = request.getParameter("chqdate");
+					String chequeAmount = request.getParameter("chqamt");
+					String chequedop = request.getParameter("chqdop");
+					
+					if(chequeNo!=null && chequedate!=null && chequeAmount!=null && chequedop!=null)
+					{
+						if(chequeNo.equals("") || chequedate.equals("") || chequeAmount.equals("") || chequedop.equals(""))
+						{
+							out.println("<div class=\"alert alert-danger\">"+
+									  "<strong>Error!</strong> All Fields are not Filled Properly</div>");
+						}
+						else
+						{
+							String type_detail = "Cheque No: "+chequeNo+",Cheque Date: "+chequedate;
+							
+							int r = d.payAdvanceMaintenance(f.getFlatID(),chequeAmount,chequedop,"CHEQUE",type_detail,"Advance Payment");
+							
+							if(r == -1)
+							{
+								out.println("<div class=\"alert alert-danger\">"+
+										  "<strong>Error!</strong> You have balance of more than one month maintenance pay that first</div>");
+							}
+							else if(r == 0)
+							{
+								out.println("<div class=\"alert alert-danger\">"+
+										  "<strong>Error!</strong> Try Again</div>");
+							}
+							else if(r == 1)
+							{
+								out.println("<div class=\"alert alert-success\">"+
+										  "<strong>Success!</strong> Advance worth "+(database.getDatabase().getAdvancePaymentInfo(f.getFlatID()).getDiscount()+Double.parseDouble(chequeAmount))+" Added Successfully</div>");
+							}
+							else if(r == -2)
+							{
+								out.println("<div class=\"alert alert-danger\">"+
+										  "<strong>Error!</strong> Date of Payment Out Of Scope</div>");
+							}
+							
+						}
+					}
+				}
+				else if(payOption.equals("2"))
+				{
+					//NEFT
+					String neftNo = request.getParameter("neftno");
+					String neftdate = request.getParameter("neftdate");
+					String neftAmount = request.getParameter("neftamt");
+					
+					if(neftNo!=null && neftdate!=null && neftAmount!=null)
+					{
+						if(neftNo.equals("") || neftdate.equals("") || neftAmount.equals(""))
+						{
+							out.println("<div class=\"alert alert-danger\">"+
+									  "<strong>Error!</strong> All Fields are not Filled Properly</div>");
+						}
+						else
+						{
+							String type_detail = "NEFT No: "+neftNo+",NEFT Date: "+neftdate;
+							
+							int r = d.payAdvanceMaintenance(f.getFlatID(),neftAmount,neftdate,"NEFT",type_detail,"Advance Payment");
+							
+							if(r == -1)
+							{
+								out.println("<div class=\"alert alert-danger\">"+
+										  "<strong>Error!</strong> You have balance of more than one month maintenance pay that first</div>");
+							}
+							else if(r == 0)
+							{
+								out.println("<div class=\"alert alert-danger\">"+
+										  "<strong>Error!</strong> Try Again</div>");
+							}
+							else if(r == 1)
+							{
+								out.println("<div class=\"alert alert-success\">"+
+										  "<strong>Success!</strong> Advance worth "+(database.getDatabase().getAdvancePaymentInfo(f.getFlatID()).getDiscount()+Double.parseDouble(neftAmount))+" Added Successfully</div>");
+							}
+							else if(r == -2)
+							{
+								out.println("<div class=\"alert alert-danger\">"+
+										  "<strong>Error!</strong> Date of Payment Out Of Scope</div>");
+							}
+							
+						}
+					}
+				}
+				else if(payOption.equals("3"))
+				{
+					//IMPS
+					String impsNo = request.getParameter("impsno");
+					String impsdate = request.getParameter("impsdate");
+					String impsAmount = request.getParameter("impsamt");
+					
+					if(impsNo!=null && impsdate!=null && impsAmount!=null)
+					{
+						if(impsNo.equals("") || impsdate.equals("") || impsAmount.equals(""))
+						{
+							out.println("<div class=\"alert alert-danger\">"+
+									  "<strong>Error!</strong> All Fields are not Filled Properly</div>");
+						}
+						else
+						{
+							String type_detail = "IMPS No: "+impsNo+",IMPS Date: "+impsdate;
+							
+							int r = d.payAdvanceMaintenance(f.getFlatID(),impsAmount,impsdate,"IMPS",type_detail,"Advance Payment");
+							
+							if(r == -1)
+							{
+								out.println("<div class=\"alert alert-danger\">"+
+										  "<strong>Error!</strong> You have balance of more than one month maintenance pay that first</div>");
+							}
+							else if(r == 0)
+							{
+								out.println("<div class=\"alert alert-danger\">"+
+										  "<strong>Error!</strong> Try Again</div>");
+							}
+							else if(r == 1)
+							{
+								out.println("<div class=\"alert alert-success\">"+
+										  "<strong>Success!</strong> Advance worth "+(database.getDatabase().getAdvancePaymentInfo(f.getFlatID()).getDiscount()+Double.parseDouble(impsAmount))+" Added Successfully</div>");
+							}
+							else if(r == -2)
+							{
+								out.println("<div class=\"alert alert-danger\">"+
+										  "<strong>Error!</strong> Date of Payment Out Of Scope</div>");
+							}
+							
+						}
+					}
+				}
+				else if(payOption.equals("4"))
+				{
+					//CASH
+					String cashAmount = request.getParameter("cashamt");
+					String cashdop = request.getParameter("cashdop");
+					
+					if(cashAmount!=null && cashdop!=null)
+					{
+						if(cashAmount.equals("") || cashdop.equals(""))
+						{
+							out.println("<div class=\"alert alert-danger\">"+
+									  "<strong>Error!</strong> All Fields are not Filled Properly</div>");
+						}
+						else
+						{
+							String type_detail = "";
+							
+							int r = d.payAdvanceMaintenance(f.getFlatID(),cashAmount,cashdop,"CASH",type_detail,"Advance Payment");
+							
+							if(r == -1)
+							{
+								out.println("<div class=\"alert alert-danger\">"+
+										  "<strong>Error!</strong> You have balance of more than one month maintenance pay that first</div>");
+							}
+							else if(r == 0)
+							{
+								out.println("<div class=\"alert alert-danger\">"+
+										  "<strong>Error!</strong> Try Again</div>");
+							}
+							else if(r == 1)
+							{
+								out.println("<div class=\"alert alert-success\">"+
+										  "<strong>Success!</strong> Advance worth "+(database.getDatabase().getAdvancePaymentInfo(f.getFlatID()).getDiscount()+Double.parseDouble(cashAmount))+" Added Successfully</div>");
+							}
+							else if(r == -2)
+							{
+								out.println("<div class=\"alert alert-danger\">"+
+										  "<strong>Error!</strong> Date of Payment Out Of Scope</div>");
+							}
+							
+						}
+					}
+				}
+			}
+			
+			
+
+			
+			
+			//=================================================================================
+			out.println("<div class=\"container\">");
+			out.println("<div class=\"well well-sm\">");
+			out.println("<a target=\"_blank\" href=\"http://localhost:8182/society_latierra/specificflat.jsp?flatno="+flatno+"\"><b>Flat Number : "+flatno.toUpperCase()+"</b></a>");
+			out.println("</div>");
+			
+			out.println("<div class=\"well well-sm\">");
+			out.println("<b>Current Remaining Advance: "+d.getAdvanceInfo(f).getRemaining_advance()+"</b>");
+			out.println("</div>");
+			
+			Double per = database.getDatabase().getAdvanceDiscount().getPercentage();
+			out.println("<div class=\"well well-sm\">");
+			out.println("<b>Pay "+per+"% less on 1 Year Advance Payment: </b><br>");
+			out.println("<b>Your 1 Year Maintenance: <span style=\"color:red;\">"+aui.getOne_year_maintenance()+"</span></b><br>");
+			out.println("<b>"+per+"% Off: <span style=\"color:red;\">"+aui.getDiscount()+"</span></b><br>");
+			out.println("<b>Your 1 Year Payable Maintenance: <span style=\"color:red;\">"+aui.getPayable_amt()+"</span></b>");
+			out.println("</div>");
+			
+			
+			out.println("<form action=\"http://localhost:8182/society_latierra/advancepay.jsp?flatno="+flatno+"\" method=\"post\" >");
+			
+			out.println("<h4>Add Advance</h4>");
+			
+			out.println("<div class=\"row\">");
+			
+			out.println("<div class=\"col-md-4\">");
+			out.println("<label>Select Payment Type:</label>"+
+			  "<select id=\"payopt\" name=\"payopt\" class=\"form-control\" onchange=\"Payfunc()\">"+
+			    "<option value=1>CHEQUE</option>"+
+			    "<option value=2>NEFT</option>"+
+			    "<option value=3>IMPS</option>"+
+			    "<option value=4>CASH</option>"+
+			  "</select>");
+			out.println("</div>");
+
+			out.println("</div>");
+			
+			
+			
+			
+			
+			
+			out.println("<div class=\"container\" id=\"container1\" style=\"display:block;\"><br>");//container
+			
+			out.println("<div class=\"row\">");
+			
+			out.println("<div class=\"col-md-4\">");
+			out.println("<div class=\"input-group\"><label>Cheque Number:</label>"+
+					   "<input type=\"text\" class=\"form-control\" style=\"height:40px;\" placeholder=\"Enter the Cheque No\""+
+			"name=\"chqno\">");
+			out.println("</div>");
+			out.println("</div>");
+			
+			out.println("<div class=\"col-md-4\">");
+			out.println("<div class=\"input-group\"><label>Cheque Date:</label>"+
+					   "<input type=\"date\" class=\"form-control\" style=\"height:40px;\""+
+			"name=\"chqdate\">");
+			out.println("</div>");
+			out.println("</div>");
+			
+			out.println("<div class=\"col-md-4\">");
+			out.println("<div class=\"input-group\"><label>Cheque Amount: </label>"+
+					   "<input type=\"text\" class=\"form-control\" style=\"height:40px;\" placeholder=\"Enter the Cheque Amount\""+
+			"name=\"chqamt\">");
+			out.println("</div>");
+			out.println("</div>");
+			
+			out.println("</div>");
+			
+			
+			out.println("<div class=\"row\">");
+			
+			out.println("<div class=\"col-md-4\">");
+			out.println("<div class=\"input-group\"><label>Date of Payment:</label>"+
+					   "<input type=\"date\" class=\"form-control\" style=\"height:40px;\""+
+			"name=\"chqdop\">");
+			out.println("</div>");
+			out.println("</div>");
+					
+			out.println("</div>");
+			
+			
+			out.println("<button style=\"margin-top:10px;\" type=\"submit\" class=\"btn btn-success\">Pay Your Money</button>");
+			
+			out.println("</div>");//container
+			
+			
+			out.println("<div class=\"container\" id=\"container2\" style=\"display:none;\">");//container 2
+			
+			out.println("<div class=\"row\">");
+			
+			out.println("<div class=\"col-md-4\">");
+			out.println("<div class=\"input-group\"><label>NEFT Number:</label>"+
+					   "<input type=\"text\" class=\"form-control\" style=\"height:40px;\" placeholder=\"Enter the NEFT No\""+
+			"name=\"neftno\">");
+			out.println("</div>");
+			out.println("</div>");
+			
+			out.println("<div class=\"col-md-4\">");
+			out.println("<div class=\"input-group\"><label>NEFT Date:</label>"+
+					   "<input type=\"date\" class=\"form-control\" style=\"height:40px;\""+
+			"name=\"neftdate\">");
+			out.println("</div>");
+			out.println("</div>");
+			
+			out.println("<div class=\"col-md-4\">");
+			out.println("<div class=\"input-group\"><label>NEFT Amount:</label>"+
+					   "<input type=\"text\" class=\"form-control\" style=\"height:40px;\" placeholder=\"Enter the NEFT Amount\""+
+			"name=\"neftamt\">");
+			out.println("</div>");
+			out.println("</div>");
+			
+			out.println("</div>");
+			
+			out.println("<button style=\"margin-top:10px;\" type=\"submit\" class=\"btn btn-success\">Pay Your Money</button>");
+			
+			out.println("</div>");//container 2
+			
+			out.println("<div class=\"container\" id=\"container3\" style=\"display:none;\">");//container 3
+			
+			out.println("<div class=\"row\">");
+			
+			out.println("<div class=\"col-md-4\">");
+			out.println("<div class=\"input-group\"><label>IMPS Number:</label>"+
+					   "<input type=\"text\" class=\"form-control\" style=\"height:40px;\" placeholder=\"Enter the IMPS No\""+
+			"name=\"impsno\">");
+			out.println("</div>");
+			out.println("</div>");
+			
+			out.println("<div class=\"col-md-4\">");
+			out.println("<div class=\"input-group\"><label>IMPS Date:</label>"+
+					   "<input type=\"date\" class=\"form-control\" style=\"height:40px;\""+
+			"name=\"impsdate\">");
+			out.println("</div>");
+			out.println("</div>");
+			
+			out.println("<div class=\"col-md-4\">");
+			out.println("<div class=\"input-group\"><label>IMPS Amount:</label>"+
+					   "<input type=\"text\" class=\"form-control\" style=\"height:40px;\" placeholder=\"Enter the IMPS Amount\""+
+			"name=\"impsamt\">");
+			out.println("</div>");
+			out.println("</div>");
+			
+			out.println("</div>");
+			
+			out.println("<button style=\"margin-top:10px;\" type=\"submit\" class=\"btn btn-success\">Pay Your Money</button>");
+			
+			
+			out.println("</div>");//container 3
+			
+			out.println("<div class=\"container\" id=\"container4\" style=\"display:none;\">");//container 4
+			
+			out.println("<div class=\"row\">");
+			
+			out.println("<div class=\"col-md-4\">");
+			out.println("<div class=\"input-group\"><label>Cash Amount:</label>"+
+					   "<input type=\"text\" class=\"form-control\" style=\"height:40px;\" placeholder=\"Enter the CASH amt\""+
+			"name=\"cashamt\">");
+			out.println("</div>");
+			out.println("</div>");
+			
+			out.println("<div class=\"col-md-4\">");
+			out.println("<div class=\"input-group\"><label>Date of Payment:</label>"+
+					   "<input type=\"date\" class=\"form-control\" style=\"height:40px;\""+
+			"name=\"cashdop\">");
+			out.println("</div>");
+			out.println("</div>");
+			
+
+			out.println("</div>");
+			
+			out.println("<button style=\"margin-top:10px;\" type=\"submit\" class=\"btn btn-success\">Pay Your Money</button>");
+			
+			
+			out.println("</div>");//container 4
+			
+			out.println("</form>");
+			
+			out.println("<h4>Previous Paid Advance</h4>");
+			
+			advance_table_info ati[] = d.advanceHistory(f);
+			
+			out.println("<table class=\"table table-striped\">");
+			out.println("<thead><tr><th>Sr.No</th><th>Amount</th><th>Discount</th><th>Payment Date</th><th>Payment Details</th><th>Gen.. Receipt</th><th>Receipt Mail</th></tr></thead><tbody>");
+			
+			if(ati!=null)
+			{
+				int count = 0;
+				for(advance_table_info a:ati)
+				{
+					
+					count++;
+					out.println("<tr>");
+					out.println("<td>"+count+"</td>");
+					out.println("<td>"+a.getAmount()+"</td>");
+					out.println("<td>"+a.getDiscount()+"</td>");
+					out.println("<td>"+a.getDate()+"</td>");
+					out.println("<td>"+a.getInfo()+"</td>");
+					out.println("<td><a target=\"_blank\" href=\"http://localhost:8182/society_latierra/generatePDF.jsp?type=advrec&f="+flatno+"&id="+a.getId()+"\">Receipt</td>");
+					out.println("<td>"+a.getReceipt()+"</td>");
+					out.println("</tr>");
+				}
+			}
+			else
+			{
+				out.println("<tr><td><b>No Records Found</b></td></tr>");	
+			}
+			out.println("</tbody><table>");
+			out.println("</div>");
+		}
+	}
+	%>
+
+</body>
+</html>

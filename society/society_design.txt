@@ -1,0 +1,192 @@
+->Show Maintenance
+->Generate PDFs
+->Mail PDFs
+--------------------NEW ARRIVAL----------------BELOW
+->Petty Cash
+->Expenditures
+->Balance Sheet
+
+
+Planning for the new arrival
+=============================
+Petty Cash(deleting option are also available)
+-----------
+->Petty Cash Means Having the Cash With You and spending on different things like repair,purchase,etc...
+->So the designing would be like this:-
+->Add petty Cash
+->Spending
+->Add headers
+->Show Spending (generate payment voucher)
+
+Expenditures(deleting option are also available)
+-------------
+->Add headers
+->Spending
+->Show Expenditures
+
+
+Show Maintenance-(Combinations)
+================================
+->Flatno,month,year
+----------------------
+<a href="flatdetails-link">FLAT-NO</a><p>Month-Year</p>
+Table:-
+<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+->Flatno,quarter,year
+----------------------
+<a href="flatdetails-link">FLAT-NO</a><p>Quarter-Year</p>
+Table:-
+<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+->Flatno,year
+---------------
+<a href="flatdetails-link">FLAT-NO</a><p>Year</p>
+Table:-
+month,<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+
+->Month,year,all_flat,all_owner
+--------------------------------
+<p>month-year</p>
+flatno,<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+->Month,year,all_flat,unpaid_owner
+<p>month-year</p>
+flatno,<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+->Month,year,all_flat,paid_owner
+<p>month-year</p>
+flatno,<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+->Month,year,a_wing,all_owner
+<p>month-year</p>
+flatno,<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+->Month,year,a_wing,unpaid_owner
+<p>month-year</p>
+flatno,<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+->Month,year,a_wing,paid_owner
+<p>month-year</p>
+flatno,<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+->Month,year,b_wing,all_owner
+<p>month-year</p>
+flatno,<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+->Month,year,b_wing,unpaid_owner
+<p>month-year</p>
+flatno,<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+->Month,year,b_wing,paid_owner
+<p>month-year</p>
+flatno,<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+->Month,year,c_wing,all_owner
+<p>month-year</p>
+flatno,<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+->Month,year,c_wing,unpaid_owner
+<p>month-year</p>
+flatno,<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+->Month,year,c_wing,paid_owner
+<p>month-year</p>
+flatno,<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+->Quarter,year,all_flat,all_owner
+<p>quarter-year</p>
+flatno,<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+->Quarter,year,all_flat,unpaid_owner
+<p>quarter-year</p>
+flatno,<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+->Quarter,year,all_flat,paid_owner
+<p>quarter-year</p>
+flatno,<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+->Quarter,year,a_wing,all_owner
+<p>quarter-year</p>
+flatno,<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+->Quarter,year,a_wing,unpaid_owner
+<p>quarter-year</p>
+flatno,<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+->Quarter,year,a_wing,paid_owner
+<p>quarter-year</p>
+flatno,<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+->Quarter,year,b_wing,all_owner
+<p>quarter-year</p>
+flatno,<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+->Quarter,year,b_wing,unpaid_owner
+<p>quarter-year</p>
+flatno,<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+->Quarter,year,b_wing,paid_owner
+<p>quarter-year</p>
+flatno,<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+->Quarter,year,c_wing,all_owner
+<p>quarter-year</p>
+flatno,<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+->Quarter,year,c_wing,unpaid_owner
+<p>quarter-year</p>
+flatno,<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+->Quarter,year,c_wing,paid_owner
+<p>quarter-year</p>
+flatno,<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+->year,all_flat,all_owner
+<p>year</p>
+flatno,<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+->year,all_flat,unpaid_owner
+<p>year</p>
+flatno,<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+->year,all_flat,paid_owner
+<p>year</p>
+flatno,<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+->year,a_flat,all_owner
+<p>year</p>
+flatno,<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+->year,a_flat,unpaid_owner
+<p>year</p>
+flatno,<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+->year,a_flat,paid_owner
+<p>year</p>
+flatno,<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+->year,b_flat,all_owner
+<p>year</p>
+flatno,<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+->year,b_flat,unpaid_owner
+<p>year</p>
+flatno,<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+->year,b_flat,paid_owner
+<p>year</p>
+flatno,<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+->year,c_flat,all_owner
+<p>year</p>
+flatno,<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+->year,c_flat,unpaid_owner
+<p>year</p>
+flatno,<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
+
+->year,c_flat,paid_owner
+<p>year</p>
+flatno,<a>Total Charge</a>,Previous Balance,Status,Bill,bill_mail,Receipt,Mail
